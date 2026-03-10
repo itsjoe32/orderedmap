@@ -80,6 +80,19 @@ data, _ := yaml.Marshal(yamlMap)
 m, err := orderedmap.NewFromYAML([]byte("z: 1\na: 2\n"))
 ```
 
+## HTTP Request Body
+
+`Reader()` returns an `io.Reader` with the JSON-encoded map, ready to use as an HTTP request body:
+
+```go
+m := orderedmap.New()
+m.Set("name", "test")
+m.Set("value", 42)
+
+req, err := http.NewRequest("POST", "https://api.example.com/data", m.Reader())
+req.Header.Set("Content-Type", "application/json")
+```
+
 ## Constraints
 
 - Keys are strings.
@@ -113,3 +126,4 @@ m.Range(func(k string, v any) bool {
 | `Range(yield)` | Iterates in order; safe to delete during iteration |
 | `NewFromJSON(data)` | Parses JSON into an OrderedMap |
 | `NewFromYAML(data)` | Parses YAML into an OrderedMap |
+| `Reader()` | Returns an `io.Reader` with the JSON-encoded map |
